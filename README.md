@@ -11,3 +11,5 @@ The checkformatch() function takes in the list of list and checks it across the 
 Computescore() will assign each character with it’s value and returns  a hash map with word as the key and score as the value.
 
 FindHighest() will find the word with the highest count.
+
+# - is given as input instead of the blank tile 
