@@ -37,6 +37,19 @@ public class Rack {
 		System.out.println(sub);//anagrams of all subsets
 		
 		Map<String,String> anagram=readFile("C:\\Users\\magulati\\Downloads\\sowpods.txt");
+		String check=checkformatch(anagram,sub);
+		System.out.println(check);
+	}
+
+	private static String checkformatch(Map<String, String> anagram, ArrayList<String> sub) {
+		// TODO Auto-generated method stub
+		for(String s : sub){
+		if (anagram.containsKey(s)){
+			System.out.println( anagram.get(s));
+		}
+
+		}
+		return "none";
 	}
 
 	private static ArrayList<String> subString(String rack, int length) {
@@ -53,7 +66,7 @@ public class Rack {
 	public static ArrayList<String> sort(ArrayList<String> sub)
 	{	ArrayList<String>sortedlist=new ArrayList<String>();
 		for(String s : sub) {
-			char[] c = s.toUpperCase().toCharArray();
+			char[] c = s.toLowerCase().toCharArray();
 			Arrays.sort(c);
 		 sortedlist.add(String.valueOf(c));
 	}
