@@ -12,4 +12,4 @@ Computescore() will assign each character with it’s value and returns  a hash 
 
 FindHighest() will find the word with the highest count.
 
-# - is given as input instead of the blank tile 
+"#" - is given as input instead of the blank tile 
