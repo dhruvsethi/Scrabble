@@ -1,22 +1,21 @@
 package Tasks;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Rack {
 	final static Charset ENCODING = StandardCharsets.UTF_8;
 
-	public static void main(String[] arg) throws IOException {
+	public static void main(String[] arg)  {
 
 		String rack;
 		int i, c, length;
@@ -29,8 +28,15 @@ public class Rack {
 		length = rack.length();
 
 		sub = subString(rack, length);
-		String file = new String("/Users/ragrewal/Documents/sowpods.txt");
-		List<List<String>> anagramsLists = anagramFinder(file,sub);
+		
+		
+		
+		
+		
+		sub = sort(sub);//anagrams of all subsets
+		System.out.println(sub);//anagrams of all subsets
+		
+		Map<String,String> anagram=readFile("C:\\Users\\magulati\\Downloads\\sowpods.txt");
 	}
 
 	private static ArrayList<String> subString(String rack, int length) {
@@ -42,34 +48,58 @@ public class Rack {
 			}
 		}
 		return sub;
-
 	}
-	//Use this to find anagrams
-	/*public static List<List<String>> anagramFinder(String fileName) throws IOException {
-		Map<String, List<String>> listOfAnagrams = new HashMap<String, List<String>>();
-		List<String> listOfWords = textFileReader(fileName);
-		for(String s : listOfWords) {
+
+	public static ArrayList<String> sort(ArrayList<String> sub)
+	{	ArrayList<String>sortedlist=new ArrayList<String>();
+		for(String s : sub) {
 			char[] c = s.toUpperCase().toCharArray();
 			Arrays.sort(c);
-			List<String> l = listOfAnagrams.get(String.valueOf(c));
-			if(l == null) {
-				l = new ArrayList<String>();
-			} 
-			l.add(s);
-			listOfAnagrams.put(String.valueOf(c), l);
-		}
-		
-		List<List<String>> anagrams = new ArrayList<List<String>>();
-		for(Map.Entry<String, List<String>> e : listOfAnagrams.entrySet()) {
-			if(e.getValue().size() > 1) {
-				anagrams.add(e.getValue());
-			}
-		}
-		return anagrams;
+		 sortedlist.add(String.valueOf(c));
 	}
-	public static List<String> textFileReader(String file) throws IOException{
-		  Path path = Paths.get(file);
-		  return Files.readAllLines(path, ENCODING);
-	}*/
+	return sortedlist;	
+	}
+		
+	
+	
+	
+	public static Map<String,String> readFile(String path){
+		 Map<String,String> words_count = new HashMap<String,String>();
+			
+			try {
+				FileInputStream fstream = new FileInputStream(path);
+				BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+				String strLine;
+				while ((strLine = br.readLine()) != null)   {
+				  
+					String sorted=sortLetters(strLine);
+				     
+					     if(words_count.keySet().contains(sorted))
+					     {
+					    	 
+					         words_count.put(sorted, words_count.get(sorted)+"  "+strLine);
+					     }
+					     else
+					         words_count.put(sorted,strLine);
+
+					}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return words_count;
+		
+	}
+
+	private static String sortLetters(String strLine) {
+		// TODO Auto-generated method stub
+		char[] chars = strLine.toCharArray();
+       Arrays.sort(chars);
+       String sorted = new String(chars).toLowerCase();
+		return sorted;
+	}
+
 //use the list of anagram lists to compare the substrings
 }
