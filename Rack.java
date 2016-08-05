@@ -1,5 +1,3 @@
-package Tasks;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,11 +15,14 @@ public class Rack {
 
 	public static void main(String[] arg)  {
 
-		String rack;
+		String rack,anagramPattern;
 		int i, c, length;
-		ArrayList<String> sub = new ArrayList<String>();
+		
+		ArrayList<String> sub = new ArrayList<>();
+		ArrayList<String> possibleWords;
 
 		Scanner in = new Scanner(System.in);
+		
 		System.out.println("Enter a string to print it's all substrings");
 		rack = in.nextLine();
 
@@ -29,27 +30,68 @@ public class Rack {
 
 		sub = subString(rack, length);
 		
-		
-		
-		
-		
 		sub = sort(sub);//anagrams of all subsets
-		System.out.println(sub);//anagrams of all subsets
+		System.out.println("AFter sort:"+sub);//anagrams of all subsets
 		
-		Map<String,String> anagram=readFile("C:\\Users\\magulati\\Downloads\\sowpods.txt");
-		String check=checkformatch(anagram,sub);
-		System.out.println(check);
+		Map<String,String> anagram=readFile("C:\\sowpods.txt");
+		
+		possibleWords = checkformatch(anagram,sub);
+		
+		System.out.println(possibleWords);
+		
+		anagramPattern = getBestWord(possibleWords);
+		
+		System.out.println(anagram.get(anagramPattern));
+		
+	}
+	
+	private static String getBestWord(ArrayList<String> wordList){
+		
+		int MAX_SCORE = 0;
+		int wordScore = 0;
+		String bestWord = "";
+		
+		for(String s:wordList){
+			
+			for(int i=0;i<s.length();++i){
+				wordScore += scrabbleScore(s.charAt(i));
+			}
+			
+			//Check if highest score
+			if(wordScore > MAX_SCORE){
+				
+				MAX_SCORE = wordScore;
+				bestWord = s;
+				
+			}
+
+			wordScore = 0;			
+				
+		}
+		
+		return bestWord;
+		
 	}
 
-	private static String checkformatch(Map<String, String> anagram, ArrayList<String> sub) {
+		
+	private static int scrabbleScore(Character letter) {
+			int score = 0;
+			char EnglishScoreTable[] = { 1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10 };
+			if (letter >= 'a' && letter <= 'z') {
+				score += EnglishScoreTable[letter - 'a'];
+			}
+			return score;
+	}
+
+	private static ArrayList<String> checkformatch(Map<String, String> anagram, ArrayList<String> sub) {
 		// TODO Auto-generated method stub
+		ArrayList<String> possibleWords = new ArrayList<>();
 		for(String s : sub){
 		if (anagram.containsKey(s)){
-			System.out.println( anagram.get(s));
+			possibleWords.add(s);
 		}
-
 		}
-		return "none";
+		return possibleWords;
 	}
 
 	private static ArrayList<String> subString(String rack, int length) {
@@ -73,7 +115,6 @@ public class Rack {
 	return sortedlist;	
 	}
 		
-	
 	
 	
 	public static Map<String,String> readFile(String path){
