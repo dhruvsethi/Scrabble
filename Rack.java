@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -23,6 +24,9 @@ public class Rack {
 
 		Scanner in = new Scanner(System.in);
 		
+		Map<String,String> anagram=readFile("C:\\sowpods.txt");
+		
+		
 		System.out.println("Enter a string to print it's all substrings");
 		rack = in.nextLine();
 
@@ -33,8 +37,6 @@ public class Rack {
 		sub = sort(sub);//anagrams of all subsets
 		
 		System.out.println("AFter sort:"+sub);//anagrams of all subsets
-		
-		Map<String,String> anagram=readFile("C:\\sowpods.txt");
 	
 		possibleWords = checkformatch(anagram,sub);
 	
@@ -44,7 +46,48 @@ public class Rack {
 		
 		System.out.println(anagram.get(anagramPattern));
 		
+		// NEW
+		
+		sub = sortWith(sub,'N');
+		possibleWords = checkformatch(anagram,sub);
+		
+		System.out.println(getBestFittingWord(anagram, possibleWords,'N',2,3));
+		
+		
+		
 	}
+	
+	private static String getBestFittingWord(Map<String,String> map, List<String> possibleWords, 
+			Character x,int frontSpace, int backSpace){
+		
+		ArrayList<String> Words = new ArrayList<>();
+		List<String> tempList;
+		int highestScore = 0;
+		String bestWord = "";
+		
+		for(String word:possibleWords){
+			String[] tempWords = map.get(word).split("\\W");
+			tempList = Arrays.asList(tempWords);
+			Words.addAll(tempList);
+		}
+		
+		System.out.println(Words);
+		
+		ArrayList<String> temp = new ArrayList<>();
+		
+		for(String word:Words){
+			if(word.indexOf(x)!=-1){
+				if(frontSpace - word.indexOf(x) >= 0 && word.length() - word.indexOf(x) <= backSpace){
+					temp.add(word);
+				}
+			}
+		}
+		
+		System.out.println(temp);
+		
+		return getBestWord(temp);
+	}
+	
 	
 	private static ArrayList<String> analyzeRack(String rack){
 		
@@ -77,6 +120,7 @@ public class Rack {
 		
 		return sub;
 	}
+	
 	private static String getBestWord(ArrayList<String> wordList){
 		
 		int MAX_SCORE = 0;
@@ -84,10 +128,11 @@ public class Rack {
 		String bestWord = "";
 		
 		for(String s:wordList){
-			
+			s = s.toLowerCase();
 			for(int i=0;i<s.length();++i){
 				wordScore += scrabbleScore(s.charAt(i));
 			}
+
 			
 			//Check if highest score
 			if(wordScore > MAX_SCORE){
@@ -95,11 +140,12 @@ public class Rack {
 				MAX_SCORE = wordScore;
 				bestWord = s;
 				
+				
 			}
 
 			wordScore = 0;			
 				
-		}
+		}		
 		
 		return bestWord;
 		
@@ -140,6 +186,17 @@ public class Rack {
 	public static ArrayList<String> sort(ArrayList<String> sub)
 	{	ArrayList<String>sortedlist=new ArrayList<String>();
 		for(String s : sub) {
+			char[] c = s.toLowerCase().toCharArray();
+			Arrays.sort(c);
+		 sortedlist.add(String.valueOf(c));
+	}
+	return sortedlist;	
+	}
+	
+	public static ArrayList<String> sortWith(ArrayList<String> sub,Character x)
+	{	ArrayList<String>sortedlist=new ArrayList<String>();
+		for(String s : sub) {
+			s+=x;
 			char[] c = s.toLowerCase().toCharArray();
 			Arrays.sort(c);
 		 sortedlist.add(String.valueOf(c));
