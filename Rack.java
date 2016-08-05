@@ -28,15 +28,16 @@ public class Rack {
 
 		length = rack.length();
 
-		sub = subString(rack, length);
+		sub = checkForEmptyTile(rack);
 		
 		sub = sort(sub);//anagrams of all subsets
+		
 		System.out.println("AFter sort:"+sub);//anagrams of all subsets
 		
 		Map<String,String> anagram=readFile("C:\\sowpods.txt");
-		
+	
 		possibleWords = checkformatch(anagram,sub);
-		
+	
 		System.out.println(possibleWords);
 		
 		anagramPattern = getBestWord(possibleWords);
@@ -45,6 +46,25 @@ public class Rack {
 		
 	}
 	
+	private static ArrayList<String> checkForEmptyTile(String rack){
+		
+		ArrayList<String> sub = new ArrayList<>();
+		String filteredRack;
+		
+		if(rack.contains("#")){
+			
+			filteredRack = rack.replace("#","");
+			
+			for(Character i='A';i<='Z';++i){
+				System.out.println(filteredRack+i);
+				sub.addAll(subString(filteredRack+i,rack.length()));
+			}
+		}
+		else 
+			sub.addAll(subString(rack,rack.length()));
+		
+		return sub;
+	}
 	private static String getBestWord(ArrayList<String> wordList){
 		
 		int MAX_SCORE = 0;
