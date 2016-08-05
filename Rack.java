@@ -59,13 +59,17 @@ public class Rack {
 			
 			if(numberOfBlanks == 1 ) {
 			for(Character i='A';i<='Z';++i){
-				System.out.println(filteredRack+i);
 				sub.addAll(subString(filteredRack+i,rack.length()));
 			}
 			}
-			
-			// Expand for more than one empty tile
-			
+			else if(numberOfBlanks == 2 ){ 
+				for(Character i='A';i<='Z';++i){
+					for(Character j='A';j<='Z';++j){
+						sub.addAll(subString(filteredRack+i+j,rack.length()));			
+					}
+
+				}
+			}
 			
 		}
 		else 
